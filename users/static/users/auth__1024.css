@@ -1,0 +1,12 @@
+@media only screen and (max-width:1024px)
+{
+    .block_auth{
+        width: 80%;
+        > form{
+            padding: 20px 10% 20px 10%;
+        }
+    }
+    .form-input{
+        width: 100%;
+    }
+}

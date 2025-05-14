@@ -1,0 +1,22 @@
+{% extends "main/index.html" %}
+
+{% block content %}
+<div class="block_auth">
+    <div class="block__title">
+        <h2 class="title__auth">Online Snake</h2>
+    </div>
+    <form action="" method="post">
+        <h3 class="title__form">Вход</h3>
+        {% csrf_token %}
+        {{form.username}}
+        {{form.password}}
+        {% if form.errors %}
+            <span class="block__error__auth">
+                {{ form.non_field_errors  }}
+            </span>
+        {% endif %}
+        <span>Не учетной записи?   <a class="link-reg" href="{% url 'register'%}">Зарегистрируйтесь!</a></span>
+        <input class="button-auth" type="submit" value="Войти">
+    </form>
+</div>
+{% endblock content %}

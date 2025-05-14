@@ -1,0 +1,23 @@
+{% extends "main/index.html" %}
+
+
+{% block content %}
+    
+    <div class="block_main">
+        {% if request.user.is_authenticated %}
+            <span id="nickname-score">{{request.user.username}} {{request.user.score}}</span>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Выйти" name='logout'>
+            </form>
+            {% else %}
+                <span>Пользователь не зарегистрирован</span>
+                <a href="{% url 'login'%}">Войти</a>
+            {% endif %}
+        <canvas id="wrapper_play" width="400px" height="400px">
+            {% include 'main/play_snake.html' %}
+        </canvas>
+        
+        <a href="{% url 'register'%}">Ссылка на регистрацию</a>
+    </div>
+{% endblock content %}
