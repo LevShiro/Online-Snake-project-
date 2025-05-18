@@ -89,6 +89,7 @@ function main() {
     load_update();
 }
 var timer_id = null;
+var skipped = 0;
 function load_update(skip) {
     let vec = new vector();
     vec.y = (mainscreen.ysiz / 100) * loadsceenparams.progress_bar_posy;
@@ -101,7 +102,7 @@ function load_update(skip) {
             loadet_elems += 1;
         }
     }
-    if (skip) { loadet_elems += 1; console.log("skipped due timeout")}
+    if (skip) { skipped += 1; loadet_elems += skipped; console.log("skipped due timeout")}
     ctx.fillStyle = "#ffffff"
     ctx.fillRect(0, 0, mainscreen.xsiz, mainscreen.ysiz);
     ctx.strokeStyle = "#000000";
@@ -138,7 +139,8 @@ class state_base {
 class wait_button extends state_base {
     update() {
         ctx.textAlign = "center";
-        fillText("нажмите любую кнопку", mainscreen.xsiz / 2, mainscreen.ysiz / 2);
+        ctx.fillStyle = "#000000"
+        ctx.fillText("нажмите любую кнопку", mainscreen.xsiz / 2, mainscreen.ysiz / 2);
 
     }
     eventer(event) {
@@ -160,7 +162,7 @@ function loop() {
     ctx.fillStyle = "#ffffff"
     ctx.fillRect(0, 0, mainscreen.xsiz, mainscreen.ysiz);
     if (!stateclass) { stateclass = new wait_button(); }
-
+    stateclass.update();
 
 
 }
