@@ -35,9 +35,9 @@ var loadsceenparams = {
 }
 
 var game_params = {
-    gridsizx = 64,
-    gridsizy = 64,
-    draw_fps = 12,
+    gridsizx: 64,
+    gridsizy: 64,
+    draw_fps: 12,
 }
 
 function EatApple() {
