@@ -35,8 +35,14 @@ var loadsceenparams = {
 }
 
 var game_params = {
-    gridsizx: 64,
-    gridsizy: 64,
+    controls_setting: {
+        up: "KeyW",
+        down: "KeyS",
+        left: "KeyA",
+        right: "KeyD",
+    },
+    gridsizx: 32,
+    gridsizy: 32,
     draw_fps: 12,
 }
 
@@ -153,7 +159,18 @@ class wait_button extends state_base {
 
 class game extends state_base{
 
+    update() {
+        let cellsizex = mainscreen.xsiz / game_params.gridsizx;
+        let cellsizey = mainscreen.ysiz / game_params.gridsizy;
+        for (var x = 0; x < game_params.gridsizx; x++) {
+            for (var y = 0; y < game_params.gridsizy; y++) {
+                ctx.fillStyle = "#00ff00";
+                ctx.drawImage(images.snake, cellsizex * x, cellsizey * y, cellsizex, cellsizey);
+                    
+            }
+        }
 
+    }
 }
 
 
