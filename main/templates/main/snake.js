@@ -7,13 +7,16 @@ class vector {
     x = 0;
     y = 0;
     constructor(x, y) {
-        if (!x || !y) {
+        if (x === null || x === undefined || y === null || y === undefined) {
             this.x = 0;
             this.y = 0;
             return;
         }
         this.x = x;
         this.y = y;
+    }
+    static sum(vec1, vec2) {
+        return new vector(vec1.x + vec2.x, vec1.y + vec2.y);
     }
 }
 
@@ -36,14 +39,14 @@ var loadsceenparams = {
 
 var game_params = {
     controls_setting: {
-        up: "KeyW",
-        down: "KeyS",
-        left: "KeyA",
-        right: "KeyD",
+        up: ["KeyW", "ArrowUp"],
+        down: ["KeyS", "ArrowDown"],
+        left: ["KeyA", "ArrowLeft"],
+        right: ["KeyD", "ArrowRight"],
     },
-    gridsizx: 32,
-    gridsizy: 32,
-    draw_fps: 12,
+    gridsizx: 16,
+    gridsizy: 16,
+    draw_fps: 1,
 }
 
 function EatApple() {
@@ -94,6 +97,7 @@ function main() {
 
     load_update();
 }
+
 var timer_id = null;
 var skipped = 0;
 function load_update(skip) {
@@ -137,7 +141,7 @@ function load_update(skip) {
 class state_base {
     update() {
     }
-    eventer(event) {
+    key_eventer(event) {
     }
 }
 
@@ -149,7 +153,7 @@ class wait_button extends state_base {
         ctx.fillText("нажмите любую кнопку", mainscreen.xsiz / 2, mainscreen.ysiz / 2);
 
     }
-    eventer(event) {
+    key_eventer(event) {
         stateclass = new game();
 
 
@@ -157,18 +161,103 @@ class wait_button extends state_base {
     
 }
 
+var grid = [] // objects 
+
+class grid_object_base{
+    type = '';
+    img = null;
+}
+class grid_snake extends grid_object_base {
+    type = 'snake';
+    img = images.snake;
+}
+class grid_apple extends grid_object_base {
+    type = 'apple';
+    img = images.apple;
+}
+
+function get_grid_cell(x, y) {
+    if (y || typeof (x) === 'number') {
+        return grid[x][y];
+    } else {
+        return grid[x.x][x.y];
+    }
+}
+function set_grid_cell(x, y, val) {
+    if (val || typeof(x) === 'number') {
+        grid[x][y] = val;
+    } else {
+        grid[x.x][x.y] = y;
+    }
+}
+
+
 class game extends state_base{
+    constructor() {
+        super();
+        for (var i = 0; i < game_params.gridsizx; i++) {
+            grid[i] = [];
+            
+        }
+        let x = Math.floor(game_params.gridsizx / 2)
+        let y = Math.floor(game_params.gridsizy / 2)
+        this.snake = [new vector(x, y), new vector(x, y - 1)]
+        this.snake_move = new vector(0, 1);
+        for (var i = 0; i < this.snake.length; i++) {
+            set_grid_cell(this.snake[i].x, this.snake[i].y, new grid_snake());
+        }
+
+    }
+    snake_step() {
+        if (this.snake[0].x + this.snake_move.x < 0 || this.snake[0].x + this.snake_move.x >= game_params.gridsizx) return false;
+        if (this.snake[0].y + this.snake_move.y < 0 || this.snake[0].y + this.snake_move.y >= game_params.gridsizy) return false;
+
+        if (get_grid_cell(vector.sum(this.snake[0], this.snake_move))) {
+            if (get_grid_cell(vector.sum(this.snake[0], this.snake_move)).type === 'apple') {
+                this.snake.unshift(vector.sum(this.snake[0], this.snake_move))
+                set_grid_cell(vector.sum(this.snake[0], this.snake_move), new grid_snake());
+            } else {
+                return false;
+            }
+        }
+
+        let x = this.snake[0].x;
+        let y = this.snake[0].y;
+        let sx = 0;
+        let sy = 0;
+        this.snake[0] = vector.sum(this.snake[0], this.snake_move)
+        set_grid_cell(this.snake[0], get_grid_cell(x, y));
+        set_grid_cell(x, y, null);
+        for (var i = 1; i < this.snake.length; i++) {
+            sx = this.snake[i].x;
+            sy = this.snake[i].y;
+            this.snake[i].x = x;
+            this.snake[i].y = y;
+            x = sx;
+            y = sy;
+            set_grid_cell(this.snake[i], get_grid_cell(x, y));
+            set_grid_cell(x, y, null);
+        }
+
+
+        return true;
+    }
 
     update() {
         let cellsizex = mainscreen.xsiz / game_params.gridsizx;
         let cellsizey = mainscreen.ysiz / game_params.gridsizy;
+        let img = null;
         for (var x = 0; x < game_params.gridsizx; x++) {
             for (var y = 0; y < game_params.gridsizy; y++) {
-                ctx.fillStyle = "#00ff00";
-                ctx.drawImage(images.snake, cellsizex * x, cellsizey * y, cellsizex, cellsizey);
-                    
+                if (grid[x][y]) {
+                    img = grid[x][y].img;
+                    ctx.drawImage(img, cellsizex * x, cellsizey * y + cellsizey - ((cellsizex / img.width) * img.height), cellsizex, (cellsizex / img.width) * img.height);
+                }
             }
         }
+
+        console.log(this.snake_step());
+
 
     }
 }
@@ -185,7 +274,7 @@ function loop() {
 }
 
 function buttons_listener(event) {
-    if (stateclass) { stateclass.eventer(event);}
+    if (stateclass) { stateclass.key_eventer(event);}
 }
 
 document.addEventListener("keydown", buttons_listener);
