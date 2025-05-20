@@ -240,6 +240,7 @@ class game extends state_base{
             if (get_grid_cell(vector.sum(this.snake[0], this.snake_move)).type === 'apple') {
                 set_grid_cell(vector.sum(this.snake[0], this.snake_move), new grid_snake());
                 this.snake.unshift(vector.sum(this.snake[0], this.snake_move))
+                EatApple();
                 return true;
             } else {
                 return false;
@@ -325,16 +326,14 @@ class game extends state_base{
         }
 
         if (!this.snake_step()) {
-            //stateclass = new wait_button();
-            stateclass = null;
-            set_loop_fps(1);
-
+            this.game_over();
+            return;
         } else {
             let c = get_grid_cell(this.apple_pos);
             if (!(c !== null && c !== undefined && c.type === 'apple')) {
                 if (!this.gen_apple()) {
-                    stateclass = new wait_button();
-                    set_loop_fps(1);
+                    this.game_over();
+                    return;
                 }
 
 
@@ -359,7 +358,12 @@ class game extends state_base{
         }
 
     }
-
+    game_over() {
+        //stateclass = new wait_button();
+        stateclass = null;
+        set_loop_fps(1);
+        sendData();
+    }
 
 }
 
