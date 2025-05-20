@@ -145,6 +145,10 @@ function load_update(skip) {
 
 
     } else {
+        for (i of Object.keys(images)) {
+            if (!(images[i] instanceof Image)) { images[i] = new Image(); }
+        }
+
         console.log("images load");
         set_loop_fps(15);
 
