@@ -23,4 +23,4 @@ def sendScore(request):
     return render(request,"main/play_snake.html",context)
 
 def recordTable(request):
-    return render(request,)
+    return render(request,'main/record_table.html')
