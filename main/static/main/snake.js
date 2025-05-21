@@ -31,8 +31,8 @@ var mainscreen = {
 
 }
 var images = {
-    snake: "snake.png",
-    apple: "apple.png",
+    snake: "static/main/snake.png",
+    apple: "static/main/apple.png",
 }
 
 
@@ -141,7 +141,7 @@ function load_update(skip) {
         clearTimeout(timer_id, 0);
     }
     if (loadet_elems < summar_elems) {
-        timer_id = setTimeout(load_update, 2000, true);
+        timer_id = setTimeout(load_update, 8000, true);
 
 
     } else {
@@ -366,7 +366,7 @@ class game extends state_base{
         //stateclass = new wait_button();
         stateclass = null;
         set_loop_fps(1);
-        sendData();
+        sendData('sendScore');
     }
 
 }
