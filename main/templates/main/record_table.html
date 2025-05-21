@@ -1,13 +1,33 @@
-{% extends "main/index.html.html" %}
+{% extends "main/index.html" %}
 
 {% block content %}
     <div class="block-record_table">
-        <table class="record_table">
-            <tr class="player-name-title">
-                <td class="player-name">Название пользователя</td>
-                <td class="score-player title-table">Кол-во съеденных яблок</td>
-                <td class="record-player title-table">Максимальное кол-во съеденных яблок</td></tr>
-            <tr class="player"><td class="score-player"></td><td class="record-player">?</td></tr>
-        </table>
+        <div id="wrapper-table">
+            <table id="record_table">
+                <tr class="player-titles">
+                    <td class="table-number title-table">№</td>
+                    <td class="player-name title table">Название пользователя</td>
+                    <td class="score-player title-table">Кол-во съеденных яблок</td>
+                    <td class="record-player title-table">Максимальное кол-во съеденных яблок</td>
+                </tr>
+                {% for user in users %}
+                    <tr class="player">
+                        <td class="table-number title-table">{{forloop.counter}}</td>
+                        <td class="player-name">{{user.username}}</td>
+                        <td class="score-player">{{user.score}}</td>
+                        <td class="record-player">{{user.record}}</td>
+                    </tr>
+                {% endfor %}
+                {% if button_add == True %}
+                    <button name="button_add"
+                        hx-get="{{users|length}}_add_table"
+                        hx-target=".block-record_table">Добавить
+                    </button>
+                {% endif %}
+            </table>
+        </div>
+        <a href="{% url 'home' %}" class="link-main">Ссылка на игру</a>
     </div>
+    
+    
 {% endblock  %}
