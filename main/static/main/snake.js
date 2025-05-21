@@ -33,6 +33,7 @@ var mainscreen = {
 var images = {
     snake: "static/main/snake.png",
     apple: "static/main/apple.png",
+    cross: "static/main/cross.png",
 }
 
 
@@ -169,6 +170,9 @@ class wait_button extends state_base {
     }
 
     update() {
+        draw_grid();
+
+
         ctx.textAlign = "center";
         ctx.fillStyle = "#000000"
         ctx.fillText("нажмите любую кнопку", mainscreen.xsiz / 2, mainscreen.ysiz / 2);
@@ -182,7 +186,30 @@ class wait_button extends state_base {
     
 }
 
-var grid = [] // contains objects 
+var grid = [] // contains objects
+for (var i = 0; i < game_params.gridsizx; i++) {
+    grid[i] = [];
+}
+
+var snake_cross = null;
+
+function draw_grid() {
+    let cellsizex = mainscreen.xsiz / game_params.gridsizx;
+    let cellsizey = mainscreen.ysiz / game_params.gridsizy;
+    let img = null;
+    for (var x = 0; x < game_params.gridsizx; x++) {
+        for (var y = 0; y < game_params.gridsizy; y++) {
+            if (grid[x][y]) {
+                img = grid[x][y].img;
+                ctx.drawImage(img, cellsizex * x, cellsizey * y + cellsizey - ((cellsizex / img.width) * img.height), cellsizex, (cellsizex / img.width) * img.height);
+            }
+        }
+    }
+    if (snake_cross) {
+        img = images.cross
+        ctx.drawImage(img, snake_cross.x * cellsizex, snake_cross.y * cellsizey, cellsizex, cellsizey)
+    }
+}
 
 class grid_object_base{
     type = '';
@@ -222,10 +249,11 @@ function move_to(dir) { // функция для управления напра
 class game extends state_base{
     constructor() {
         super();
+        snake_cross = null;
         for (var i = 0; i < game_params.gridsizx; i++) {
-            grid[i] = [];
-            
+            grid[i] = []
         }
+
         let x = Math.floor(game_params.gridsizx / 2)
         let y = Math.floor(game_params.gridsizy / 2)
         this.snake = [new vector(x, y), new vector(x, y - 1), new vector(x, y - 2)]
@@ -239,6 +267,7 @@ class game extends state_base{
 
         set_loop_fps(game_params.draw_fps);
     }
+
     snake_step() {
         if (this.snake[0].x + this.snake_move.x < 0 || this.snake[0].x + this.snake_move.x >= game_params.gridsizx) return false;
         if (this.snake[0].y + this.snake_move.y < 0 || this.snake[0].y + this.snake_move.y >= game_params.gridsizy) return false;
@@ -320,17 +349,8 @@ class game extends state_base{
     }
 
     update() {
-        let cellsizex = mainscreen.xsiz / game_params.gridsizx;
-        let cellsizey = mainscreen.ysiz / game_params.gridsizy;
-        let img = null;
-        for (var x = 0; x < game_params.gridsizx; x++) {
-            for (var y = 0; y < game_params.gridsizy; y++) {
-                if (grid[x][y]) {
-                    img = grid[x][y].img;
-                    ctx.drawImage(img, cellsizex * x, cellsizey * y + cellsizey - ((cellsizex / img.width) * img.height), cellsizex, (cellsizex / img.width) * img.height);
-                }
-            }
-        }
+        
+        draw_grid();
 
         if (!this.snake_step()) {
             this.game_over();
@@ -369,7 +389,10 @@ class game extends state_base{
         //stateclass = new wait_button();
         stateclass = null;
         set_loop_fps(1);
+        snake_cross = new vector(this.snake[0].x + this.snake_move.x / 2, this.snake[0].y + this.snake_move.y / 2)
+        draw_grid();
         sendData('sendScore');
+        
     }
 
 }
