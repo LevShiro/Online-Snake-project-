@@ -176,7 +176,7 @@ class wait_button extends state_base {
 
         ctx.textAlign = "center";
         ctx.fillStyle = "#000000"
-        ctx.fillText("нажмите R чтобы начать занова", mainscreen.xsiz / 2, mainscreen.ysiz / 2);
+        ctx.fillText("нажмите R чтобы начать заново", mainscreen.xsiz / 2, mainscreen.ysiz / 2);
 
     }
     key_eventer(event) {
