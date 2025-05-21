@@ -49,6 +49,7 @@ var game_params = {
         down: ["KeyS", "ArrowDown"],
         left: ["KeyA", "ArrowLeft"],
         right: ["KeyD", "ArrowRight"],
+        restart: ["KeyR"]
     },
     gridsizx: 16,
     gridsizy: 16,
@@ -175,13 +176,15 @@ class wait_button extends state_base {
 
         ctx.textAlign = "center";
         ctx.fillStyle = "#000000"
-        ctx.fillText("нажмите любую кнопку", mainscreen.xsiz / 2, mainscreen.ysiz / 2);
+        ctx.fillText("нажмите R чтобы начать занова", mainscreen.xsiz / 2, mainscreen.ysiz / 2);
 
     }
     key_eventer(event) {
-        stateclass = new game();
-
-
+        if (event instanceof KeyboardEvent) {
+            if (game_params.controls_setting.restart.includes(event.code)) {
+                stateclass = new game();
+            }
+        }
     }
     
 }
