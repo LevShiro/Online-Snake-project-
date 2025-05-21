@@ -151,9 +151,6 @@ function load_update(skip) {
 
         console.log("images load");
         set_loop_fps(15);
-
-
-
     }
 }
 
@@ -212,6 +209,12 @@ function set_grid_cell(x, y, val) {
         grid[x][y] = val;
     } else {
         grid[x.x][x.y] = y;
+    }
+}
+
+function move_to(dir) { // функция для управления направлением змейки
+    if (stateclass instanceof game) {
+        stateclass.key_eventer(dir);
     }
 }
 
