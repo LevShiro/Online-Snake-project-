@@ -28,7 +28,11 @@ class vector {
 var mainscreen = {
     xsiz: 1000,
     ysiz: 1000,
-
+    canvas: null,
+    update_size() {
+        mainscreen.xsiz = mainscreen.canvas.width;
+        mainscreen.ysiz = mainscreen.canvas.height;
+    }
 }
 var images = {
     snake: "static/main/snake.png",
@@ -54,6 +58,7 @@ var game_params = {
     gridsizx: 16,
     gridsizy: 16,
     draw_fps: 5,
+
 }
 
 function EatApple() {
@@ -78,20 +83,22 @@ const sendData = async (url)=>{
     $('#nickname-score').load(document.URL +  ' #nickname-score');
 }
 
+
 function main() {
     ctx = document.getElementById("wrapper_play")
     if (!ctx) {
         console.error("cant find canvas with id === wrapper_play")
         return;
     }
-    mainscreen.xsiz = ctx.width;
-    mainscreen.ysiz = ctx.height
+    mainscreen.canvas = ctx;
+    mainscreen.update_size();
     ctx = ctx.getContext("2d");
     if (!ctx) {
         console.error("cant find canvas with id === wrapper_play")
         return;
     }
-    ctx.strokeRect(0, 0, mainscreen.xsiz, mainscreen.ysiz)
+    window.addEventListener('resize', mainscreen.update_size);
+    ctx.strokeRect(0, 0, mainscreen.xsiz, mainscreen.ysiz);
     function a(imgc, ic) {
         return function () { images[ic] = imgc; load_update(); }
     }
