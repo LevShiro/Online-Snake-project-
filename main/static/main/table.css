@@ -1,0 +1,23 @@
+table, th, td {
+    border: 1px solid white;
+    
+}
+.block-record_table{
+    display: flex;
+    flex-direction: column;
+    
+}
+.link-main{
+    background-color: #d10000;
+    border: 3px solid #d10000;
+    color:white;
+    padding: 10px;
+    align-self: center;
+    margin-top: 50px;
+    border-radius: 10px;
+    transition: 0.3s;
+    &:hover{
+        
+        transform: scale(1.1);
+    }
+}

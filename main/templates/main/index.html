@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'main/main.css' %}">
+    <link rel="stylesheet" href="{% static 'main/table.css' %}">
     <link rel="stylesheet" href="{% static 'users/auth.css' %}">
     <link rel="stylesheet" href="{% static 'users/auth__1024.css' %}">
     <title>Online Snake</title>
     <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"> </script>
+    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 </head>
 
 
@@ -16,7 +18,8 @@
 <body>
     {% block content %}{% endblock %}
     <script src="{% static 'main/cookie.js'%}" type="module"></script>
-    <script src="{% static 'main/score.js'%}"></script>
     
+    <script src="{% static 'main/snake.js'%}"></script>
+    <script src="{% static 'main/table-add.js' %}"></script>
 </body>
 </html>
